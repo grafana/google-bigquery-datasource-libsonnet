@@ -1,0 +1,89 @@
+{
+  "$ref": "#/definitions/QueryModel",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "QueryFormat": {
+      "enum": [
+        0,
+        1
+      ],
+      "type": "number"
+    },
+    "QueryModel": {
+      "additionalProperties": false,
+      "properties": {
+        "connectionArgs": {
+          "additionalProperties": false,
+          "properties": {
+            "dataset": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "table": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "dataset",
+            "table",
+            "location"
+          ],
+          "type": "object"
+        },
+        "datasource": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "description": "The plugin type-id",
+                  "type": "string"
+                },
+                "uid": {
+                  "description": "Specific datasource instance",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "For mixed data sources the selected datasource is on the query level. For non mixed scenarios this is undefined. TODO find a better way to do this ^ that's friendly to schema TODO this shouldn't be unknown but DataSourceRef | null"
+        },
+        "format": {
+          "$ref": "#/definitions/QueryFormat"
+        },
+        "hide": {
+          "description": "true if query is disabled (ie should not be returned to the dashboard) Note this does not always imply that the query should not be executed since the results from a hidden query may be used as the input to other queries (SSE etc)",
+          "type": "boolean"
+        },
+        "key": {
+          "description": "Unique, guid like, string (used only in explore mode)",
+          "type": "string"
+        },
+        "queryType": {
+          "description": "Specify the query flavor TODO make this required and give it a default",
+          "type": "string"
+        },
+        "rawSql": {
+          "type": "string"
+        },
+        "refId": {
+          "description": "A unique identifier for the query within the list of targets. In server side expressions, the refId is used as a variable name to identify results. By default, the UI will assign A->Z; however setting meaningful names may be useful.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connectionArgs",
+        "format",
+        "rawSql",
+        "refId"
+      ],
+      "type": "object"
+    }
+  }
+}
